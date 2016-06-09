@@ -1,4 +1,5 @@
 class TopicsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy, :upvote, :downvote]
   before_action :set_topic, only: [:show, :edit, :update, :destroy]
 
   # GET /topics
