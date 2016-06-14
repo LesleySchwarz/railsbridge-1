@@ -1,10 +1,11 @@
 class TopicsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy, :upvote, :downvote]
   before_action :set_topic, only: [:show, :edit, :update, :destroy]
 
   # GET /topics
   # GET /topics.json
   def index
-    @topics = Topic.all
+    @topics = Topic.all.order('count desc')
   end
 
   # GET /topics/1
@@ -64,7 +65,16 @@ class TopicsController < ApplicationController
   def upvote
     @topic = Topic.find(params[:id])
     @topic.votes.create
-    redirect_to(topics_path)
+     redirect_to(topics_path)
+  end
+
+  def downvote
+    @topic = Topic.find(params[:id])
+
+    @topic.votes.last.destroy if @topic.votes.count > 0
+
+
+     redirect_to(topics_path)
   end
 
   private
